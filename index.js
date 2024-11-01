@@ -18,6 +18,10 @@ const PORT = process.env.PORT || 3000;
 // CORS Configuration
 app.use(cors());
 
+app.get('/', (req, res) => {
+    res.send('Welcome to the API!'); // Welcome message
+});
+
 // Increase JSON and URL-encoded data limits
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
