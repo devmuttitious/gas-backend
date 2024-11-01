@@ -10,14 +10,13 @@ const ghazalRoutes = require('./routes/ghazalRoute');
 const inqlabiPoetryRoutes = require('./routes/inqlabiPoetryRoute');
 const blogRoutes = require('./routes/blogRoute');
 const blogDetailsRoute = require('./routes/blogDetailsRoute');
+const galleryRoutes = require('./routes/galleryRoute');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // CORS Configuration
-app.use(cors({
-    origin: 'https://abbassaghar.co.uk'  // Allow requests only from your frontend domain
-}));
+app.use(cors());
 
 // Increase JSON and URL-encoded data limits
 app.use(bodyParser.json({ limit: '10mb' }));
@@ -38,6 +37,8 @@ app.use('/api/ghazals', ghazalRoutes);
 app.use('/api/inqlabi-poetry', inqlabiPoetryRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/blogs/details', blogDetailsRoute);
+app.use('/api/gallery', galleryRoutes);
+
 
 // Contact Form Route
 app.post('/api/contact', async (req, res) => {
