@@ -13,7 +13,8 @@ const blogDetailsRoute = require('./routes/blogDetailsRoute');
 const galleryRoutes = require('./routes/galleryRoute');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.SERVER_PORT || 3000;
+
 
 // CORS Configuration
 app.use(cors());
@@ -68,6 +69,12 @@ app.post('/api/contact', async (req, res) => {
         res.status(500).json({ message: 'Failed to send message.' });
     }
 });
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
+
 
 module.exports = app;
 
