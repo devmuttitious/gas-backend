@@ -13,4 +13,9 @@ const Poetry = sequelize.define('Poetry', {
     }
 });
 
+// Sync the model with the database
+Poetry.sync()
+    .then(() => console.log('Poetry model synced with the database'))
+    .catch((error) => console.error('Error syncing Poetry model:', error));
+
 module.exports = Poetry;
