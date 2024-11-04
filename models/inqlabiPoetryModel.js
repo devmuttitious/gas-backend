@@ -13,4 +13,9 @@ const InqlabiPoetry = sequelize.define('InqlabiPoetry', {
     }
 });
 
+// Sync the model with the database
+InqlabiPoetry.sync()
+    .then(() => console.log('InqlabiPoetry model synced with the database'))
+    .catch((error) => console.error('Error syncing InqlabiPoetry model:', error));
+
 module.exports = InqlabiPoetry; // Export the InqlabiPoetry model
