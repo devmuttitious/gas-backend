@@ -26,21 +26,21 @@ const Blog = sequelize.define('Blog', {
 });
 
 // Model operations
-const BlogDetailsModel = {
-    // Retrieve a blog by its primary key (id)
-    getBlogById: async (id) => {
-        try {
-            const blog = await Blog.findByPk(id);
-            if (!blog) {
-                throw new Error('Blog not found');
-            }
-            return blog;
-        } catch (error) {
-            console.error(`Error fetching blog with ID ${id}:`, error.message);
-            throw error;
-        }
-    },
-};
+// const BlogDetailsModel = {
+//     // Retrieve a blog by its primary key (id)
+//     getBlogById: async (id) => {
+//         try {
+//             const blog = await Blog.findByPk(id);
+//             if (!blog) {
+//                 throw new Error('Blog not found');
+//             }
+//             return blog;
+//         } catch (error) {
+//             console.error(`Error fetching blog with ID ${id}:`, error.message);
+//             throw error;
+//         }
+//     },
+// }
 
 // Sync the model with the database
 Blog.sync()
