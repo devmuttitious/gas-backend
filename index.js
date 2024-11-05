@@ -9,6 +9,7 @@ const poetryRoutes = require('./routes/poetryRoute');
 const ghazalRoutes = require('./routes/ghazalRoute');
 const inqlabiPoetryRoutes = require('./routes/inqlabiPoetryRoute');
 const blogRoutes = require('./routes/blogRoute');
+const blogDetailsRoute = require('./routes/blogDetailsRoute');
 const galleryRoutes = require('./routes/galleryRoute');
 
 const app = express();
@@ -40,6 +41,7 @@ app.use('/api/poetry', poetryRoutes);
 app.use('/api/ghazals', ghazalRoutes);
 app.use('/api/inqlabi-poetry', inqlabiPoetryRoutes);
 app.use('/api/blogs', blogRoutes);
+app.use('/api/blogs/details', blogDetailsRoute);
 app.use('/api/gallery', galleryRoutes);
 
 
