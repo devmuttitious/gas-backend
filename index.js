@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser');
 require('dotenv').config(); // Load environment variables
 
@@ -29,14 +28,7 @@ app.get('/', (req, res) => {
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
-// Nodemailer Configuration
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,       // Your email from .env file
-        pass: process.env.EMAIL_PASS        // Your email password from .env
-    }
-});
+
 
 // API Routes
 app.use('/api/poetry', poetryRoutes);
