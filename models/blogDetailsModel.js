@@ -1,4 +1,3 @@
-// backend/models/Blog.js
 const { sequelize } = require('../config/db'); // Import the sequelize instance
 const { DataTypes } = require('sequelize');
 
@@ -30,8 +29,9 @@ const Blog = sequelize.define('Blog', {
         allowNull: true,
     },
 }, {
-    tableName: 'blogs', // Specify the table name
+    tableName: 'Blogs', // Specify the existing table name
     timestamps: true,   // Automatically manage createdAt and updatedAt
+    freezeTableName: true, // Prevent Sequelize from pluralizing the table name
 });
 
 // Model operations
@@ -51,8 +51,8 @@ const BlogDetailsModel = {
     },
 };
 
-// Sync the model with the database
-Blog.sync()
+// Sync the model with the database (optional if the table already exists)
+Blog.sync({ alter: true }) // Use alter if you want to update the table structure if necessary
     .then(() => console.log('Blog model synced with the database'))
     .catch((error) => console.error('Error syncing Blog model:', error));
 
