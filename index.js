@@ -16,8 +16,22 @@ const app = express();
 const PORT = process.env.SERVER_PORT || 3000;
 
 
-// CORS Configuration
-app.use(cors());
+const allowedOrigins = [
+    'http://localhost:3000', // Local development
+    'https://abbassaghar.co.uk' // Production
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    }
+}));
+
 
 app.get('/', (req, res) => {
     res.send('Welcome to the API!'); // Welcome message
