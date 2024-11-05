@@ -1,5 +1,5 @@
 const express = require('express');
-const { getBlogs, createBlog, deleteBlog } = require('../controllers/blogController');
+const { getBlogs, createBlog, deleteBlog, getBlogDetails } = require('../controllers/blogController');
 const router = express.Router();
 const multer = require('multer');
 
@@ -10,5 +10,5 @@ const upload = multer({ storage }).single('image'); // Expect 'image' field for 
 router.get('/', getBlogs); // GET all blogs
 router.post('/', upload, createBlog); // POST a new blog with image upload
 router.delete('/:id', deleteBlog); // DELETE a blog by ID
-
+router.get('/:id', getBlogDetails);
 module.exports = router;
