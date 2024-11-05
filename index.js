@@ -40,7 +40,6 @@ app.use('/api/poetry', poetryRoutes);
 app.use('/api/ghazals', ghazalRoutes);
 app.use('/api/inqlabi-poetry', inqlabiPoetryRoutes);
 app.use('/api/blogs', blogRoutes);
-app.use('/api/blogs/details', blogRoutes);
 app.use('/api/gallery', galleryRoutes);
 
 
