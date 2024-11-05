@@ -75,26 +75,4 @@ const deleteBlog = async (req, res) => {
     }
 };
 
-// Get blog details by ID
-const getBlogDetails = async (req, res) => {
-    const blogId = req.params.id;
-
-    try {
-        const blog = await Blog.findByPk(blogId);
-        if (!blog) {
-            return res.status(404).json({ message: 'Blog not found' });
-        }
-
-        const blogData = {
-            ...blog.toJSON(),
-            image: blog.image ? blog.image.toString('base64') : null
-        };
-
-        res.status(200).json(blogData);
-    } catch (error) {
-        console.error('Error fetching blog details:', error);
-        res.status(500).json({ message: 'Server error', error: error.message });
-    }
-};
-
-module.exports = { getBlogs, createBlog, uploadImage, deleteBlog, getBlogDetails };
+module.exports = { getBlogs, createBlog, uploadImage, deleteBlog };
