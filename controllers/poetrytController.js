@@ -33,11 +33,20 @@ const createPoetry = async (req, res) => {
     }
 };
 
+const mongoose = require('mongoose'); // Import mongoose for ObjectId validation
+
 // Function to delete a poetry entry
 const deletePoetry = async (req, res) => {
     const { id } = req.params; // Get the ID from the request parameters
 
+    // Validate if the id is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: "Invalid ID format." });
+    }
+
     try {
+        console.log(`Attempting to delete poetry with ID: ${id}`); // Log the id for debugging
+
         const deletedPoetry = await Poetry.findByIdAndDelete(id); // Find and delete the poetry entry by its MongoDB ID
 
         if (!deletedPoetry) {
@@ -49,6 +58,7 @@ const deletePoetry = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 // Export the functions
 module.exports = { getPoetry, createPoetry, deletePoetry };
