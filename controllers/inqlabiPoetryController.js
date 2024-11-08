@@ -1,11 +1,10 @@
-// backend/controllers/inqlabiPoetryController.js
-const InqlabiPoetry = require('../models/inqlabiPoetryModel');
+const InqlabiPoetry = require('../models/inqlabiPoetryModel'); // Import the InqlabiPoetry model
 
 // Function to fetch poetry entries
 const getInqlabiPoetry = async (req, res) => {
     try {
-        const poetry = await InqlabiPoetry.findAll();
-        res.json(poetry);
+        const poetry = await InqlabiPoetry.find(); // Fetch all poetry entries from MongoDB
+        res.json(poetry); // Return the list of poetry entries
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -20,8 +19,9 @@ const createInqlabiPoetry = async (req, res) => {
     }
 
     try {
-        const newPoetry = await InqlabiPoetry.create({ text, author });
-        res.status(201).json(newPoetry);
+        const newPoetry = new InqlabiPoetry({ text, author }); // Create a new InqlabiPoetry instance
+        await newPoetry.save(); // Save the new poetry entry to MongoDB
+        res.status(201).json(newPoetry); // Return the created poetry entry
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -29,20 +29,19 @@ const createInqlabiPoetry = async (req, res) => {
 
 // Function to delete a poetry entry by ID
 const deleteInqlabiPoetry = async (req, res) => {
-    const { id } = req.params;
+    const { id } = req.params; // Get the poetry entry ID from the request parameters
 
     try {
-        const deleted = await InqlabiPoetry.destroy({ where: { id } });
+        const deletedPoetry = await InqlabiPoetry.findByIdAndDelete(id); // Find and delete the poetry entry by its MongoDB ID
 
-        if (deleted) {
-            return res.status(204).send(); // No Content response
+        if (!deletedPoetry) {
+            return res.status(404).json({ message: "Poetry not found." }); // If no poetry entry is found
         }
 
-        res.status(404).json({ message: "Poetry not found." });
+        res.status(204).send(); // No Content response to indicate successful deletion
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
-
 
 module.exports = { getInqlabiPoetry, createInqlabiPoetry, deleteInqlabiPoetry };

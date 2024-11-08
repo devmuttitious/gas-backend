@@ -1,28 +1,26 @@
-const BlogDetailsModel = require('../models/blogDetailsModel');
+// blogDetailsController.js
+const Blog = require('../models/blogModel'); // Reference the existing Blog model
 
+// Function to fetch a specific blog by ID
 const getBlogDetails = async (req, res) => {
-    const blogId = req.params.id;
-    console.log(`Fetching details for blog ID: ${blogId}`);
+    const { id } = req.params; // Get the blog ID from request parameters
 
     try {
-        const blog = await BlogDetailsModel.getBlogById(blogId);
+        const blog = await Blog.findById(id); // Find the blog by its MongoDB ID
+        if (!blog) {
+            return res.status(404).json({ message: "Blog not found" });
+        }
 
-        // Convert BLOB image to base64 if it exists
-        const blogData = {
-            ...blog.toJSON(),
-            image: blog.image ? blog.image.toString('base64') : null // Convert BLOB to base64
+        // Convert image buffer to Base64 if image exists
+        const blogWithBase64Image = {
+            ...blog.toObject(),
+            image: blog.image ? blog.image.toString('base64') : null,
         };
 
-        res.status(200).json(blogData);
+        res.json(blogWithBase64Image); // Send the blog details as response
     } catch (error) {
-        console.error('Error fetching blog details:', error);
-        if (error.message === 'Blog not found') {
-            return res.status(404).json({ message: 'Blog not found' });
-        }
-        res.status(500).json({ message: 'Server error', error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
-module.exports = {
-    getBlogDetails,
-};
+module.exports = { getBlogDetails };

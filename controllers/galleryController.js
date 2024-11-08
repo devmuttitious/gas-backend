@@ -8,10 +8,10 @@ const upload = multer({ storage: storage }).single('image'); // Expects 'image' 
 // Function to fetch all gallery items
 const getGalleryItems = async (req, res) => {
     try {
-        const galleryItems = await Gallery.findAll(); // Fetch all gallery items
+        const galleryItems = await Gallery.find(); // Fetch all gallery items from MongoDB
         const galleryWithBase64Images = galleryItems.map(item => ({
-            id: item.id,
-            image: item.image ? item.image.toString('base64') : null, // Convert BLOB to Base64 string
+            id: item._id, // MongoDB uses _id as the primary key
+            image: item.image ? item.image.toString('base64') : null, // Convert image buffer to Base64 string
             caption: item.caption
         }));
         res.json(galleryWithBase64Images);
@@ -29,7 +29,7 @@ const createGalleryItem = async (req, res) => {
         return res.status(400).json({ message: "Image file is required." });
     }
 
-    // Convert the image buffer to BLOB format
+    // Convert the image buffer to Binary data
     const image = req.file.buffer; // Get the image data from memory storage
 
     if (!caption) {
@@ -37,7 +37,8 @@ const createGalleryItem = async (req, res) => {
     }
 
     try {
-        const newGalleryItem = await Gallery.create({ image, caption }); // Create a new gallery item
+        const newGalleryItem = new Gallery({ image, caption }); // Create a new gallery item instance
+        await newGalleryItem.save(); // Save the new gallery item to MongoDB
         res.status(201).json(newGalleryItem);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -59,12 +60,12 @@ const deleteGalleryItem = async (req, res) => {
     const { id } = req.params; // Get gallery item ID from request parameters
 
     try {
-        const galleryItem = await Gallery.findByPk(id); // Find the gallery item by primary key (ID)
+        const galleryItem = await Gallery.findById(id); // Find the gallery item by MongoDB ID
         if (!galleryItem) {
             return res.status(404).json({ message: "Gallery item not found." });
         }
 
-        await galleryItem.destroy(); // Delete the gallery item from the database
+        await galleryItem.remove(); // Remove the gallery item from MongoDB
         res.status(200).json({ message: "Gallery item deleted successfully." });
     } catch (error) {
         res.status(500).json({ message: error.message });

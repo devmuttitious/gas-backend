@@ -7,8 +7,13 @@ const multer = require('multer');
 const storage = multer.memoryStorage(); // Store images in memory
 const upload = multer({ storage }).single('image'); // Expect 'image' field for file upload
 
-router.get('/', getBlogs); // GET all blogs
-router.post('/', upload, createBlog); // POST a new blog with image upload
-router.delete('/:id', deleteBlog); // DELETE a blog by ID
+// Route to get all blogs
+router.get('/', getBlogs);
+
+// Route to create a new blog with image upload
+router.post('/', upload, createBlog);
+
+// Route to delete a blog by ID
+router.delete('/:id', deleteBlog);
 
 module.exports = router;

@@ -1,21 +1,22 @@
-// backend/models/Poetry.js
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
+const mongoose = require('mongoose');
 
-const Poetry = sequelize.define('Poetry', {
+// Define the Poetry Schema
+const poetrySchema = new mongoose.Schema({
     text: {
-        type: DataTypes.TEXT,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     author: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
+        trim: true,
     }
+}, {
+    collection: 'Poetry',  // Specify the collection name
+    timestamps: true,       // Automatically adds createdAt and updatedAt fields
 });
 
-// Sync the model with the database
-Poetry.sync()
-    .then(() => console.log('Poetry model synced with the database'))
-    .catch((error) => console.error('Error syncing Poetry model:', error));
+// Create and export the Poetry model
+const Poetry = mongoose.model('Poetry', poetrySchema);
 
 module.exports = Poetry;

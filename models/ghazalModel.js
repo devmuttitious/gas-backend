@@ -1,29 +1,31 @@
-// backend/models/Ghazal.js
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
+const mongoose = require('mongoose');
 
-const Ghazal = sequelize.define('Ghazal', {
+// Define the Ghazal Schema
+const ghazalSchema = new mongoose.Schema({
     title: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
+        trim: true,
     },
     date: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        type: Date,
+        default: Date.now,
     },
     author: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
+        trim: true,
     },
     body: {
-        type: DataTypes.TEXT,
-        allowNull: false,
+        type: String,
+        required: true,
     }
+}, {
+    collection: 'Ghazals', // Specify the collection name
+    timestamps: true,      // Automatically adds createdAt and updatedAt fields
 });
 
-// Sync the model with the database
-Ghazal.sync()
-    .then(() => console.log('Ghazal model synced with the database'))
-    .catch((error) => console.error('Error syncing Ghazal model:', error));
+// Create and export the Ghazal model
+const Ghazal = mongoose.model('Ghazal', ghazalSchema);
 
 module.exports = Ghazal;

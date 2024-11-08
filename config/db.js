@@ -1,32 +1,22 @@
 // backend/config/db.js
-const mysql = require('mysql2');
-const { Sequelize } = require('sequelize');
+const mongoose = require('mongoose');
 require('dotenv').config(); // Load environment variables
 
-// MySQL connection
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT, // Use DB_PORT for database connection
-});
+// MongoDB connection string
+const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://abbass-saghar:880Abbass@cluster0.oscplab.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
+// MongoDB connection function
+const connectDB = async () => {
+  try {
+    await mongoose.connect(MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('Connected to MongoDB successfully.');
+  } catch (error) {
+    console.error('MongoDB connection failed:', error.message);
+    process.exit(1); // Exit process with failure
+  }
+};
 
-// Connect to MySQL
-db.connect((err) => {
-    if (err) {
-        console.error('Database connection failed: ' + err.stack);
-        return;
-    }
-    console.log('Connected to the database.');
-});
-
-// Sequelize connection
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-    host: process.env.DB_HOST,
-    dialect: 'mysql', // Use mysql for MySQL databases
-});
-
-// Export both connections
-module.exports = { sequelize, db };
+module.exports = connectDB;

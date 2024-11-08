@@ -1,33 +1,36 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
+const mongoose = require('mongoose');
 
-const Blog = sequelize.define('Blog', {
+// Define the Blog Schema
+const blogSchema = new mongoose.Schema({
     title: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
+        trim: true,
     },
     date: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        type: Date,
+        default: Date.now,
     },
     author: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
+        trim: true,
     },
     content: {
-        type: DataTypes.TEXT,
-        allowNull: false,
+        type: String,
+        required: true,
     },
-    // Change from imageUrl to image for storing file
     image: {
-        type: DataTypes.BLOB('long'), // Use BLOB type for image data
-        allowNull: false,
+        type: Buffer, // For storing image data as binary (similar to BLOB)
+        required: true,
+        contentType: String, // Optionally store the MIME type of the image
     }
+}, {
+    collection: 'Blogs', // Specify the collection name
+    timestamps: true,    // Automatically adds createdAt and updatedAt fields
 });
 
-// Sync the model with the database
-Blog.sync()
-    .then(() => console.log('Blog model synced with the database'))
-    .catch((error) => console.error('Error syncing Blog model:', error));
+// Create and export the Blog model
+const Blog = mongoose.model('Blog', blogSchema);
 
 module.exports = Blog;

@@ -1,10 +1,10 @@
-const Ghazal = require('../models/ghazalModel');
+const Ghazal = require('../models/ghazalModel'); // Import the Ghazal model
 
 // Function to fetch all ghazals
 const getGhazals = async (req, res) => {
     try {
-        const ghazals = await Ghazal.findAll(); // Assuming you are using Sequelize
-        res.json(ghazals);
+        const ghazals = await Ghazal.find(); // Fetch all ghazals from MongoDB
+        res.json(ghazals); // Return the list of ghazals
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -19,8 +19,9 @@ const createGhazal = async (req, res) => {
     }
 
     try {
-        const newGhazal = await Ghazal.create({ title, date, author, body });
-        res.status(201).json(newGhazal);
+        const newGhazal = new Ghazal({ title, date, author, body }); // Create a new Ghazal instance
+        await newGhazal.save(); // Save the new Ghazal to MongoDB
+        res.status(201).json(newGhazal); // Return the created Ghazal
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -28,13 +29,13 @@ const createGhazal = async (req, res) => {
 
 // Delete a Ghazal
 const deleteGhazal = async (req, res) => {
-    const { id } = req.params;
+    const { id } = req.params; // Get Ghazal ID from the request parameters
     try {
-        const ghazal = await Ghazal.findByPk(id);
+        const ghazal = await Ghazal.findById(id); // Find the Ghazal by its MongoDB ID
         if (!ghazal) {
             return res.status(404).json({ message: 'Ghazal not found' });
         }
-        await ghazal.destroy();
+        await ghazal.remove(); // Delete the Ghazal from MongoDB
         res.json({ message: 'Ghazal deleted successfully' });
     } catch (error) {
         console.error('Error deleting Ghazal:', error);

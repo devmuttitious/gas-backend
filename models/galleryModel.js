@@ -1,22 +1,23 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
+const mongoose = require('mongoose');
 
-const Gallery = sequelize.define('Gallery', {
-    // Add a field for the image (stored as BLOB)
+// Define the Gallery Schema
+const gallerySchema = new mongoose.Schema({
     image: {
-        type: DataTypes.BLOB('long'), // Use BLOB type for storing image data
-        allowNull: false,
+        type: Buffer, // For storing image data as binary (similar to BLOB in MySQL)
+        required: true,
+        contentType: String, // Optionally store the MIME type of the image
     },
-    // Add a field for the caption
     caption: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    }
+        type: String,
+        required: true,
+        trim: true,
+    },
+}, {
+    collection: 'Gallery', // Specify the collection name
+    timestamps: true,      // Automatically adds createdAt and updatedAt fields
 });
 
-// Sync the model with the database
-Gallery.sync()
-    .then(() => console.log('Gallery model synced with the database'))
-    .catch((error) => console.error('Error syncing Gallery model:', error));
+// Create and export the Gallery model
+const Gallery = mongoose.model('Gallery', gallerySchema);
 
 module.exports = Gallery;

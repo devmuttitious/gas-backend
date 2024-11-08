@@ -1,21 +1,22 @@
-// backend/models/InqlabiPoetry.js
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
+const mongoose = require('mongoose');
 
-const InqlabiPoetry = sequelize.define('InqlabiPoetry', { 
+// Define the InqlabiPoetry Schema
+const inqlabiPoetrySchema = new mongoose.Schema({
     text: {
-        type: DataTypes.TEXT,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     author: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
+        trim: true,
     }
+}, {
+    collection: 'InqlabiPoetry', // Specify the collection name
+    timestamps: true,             // Automatically adds createdAt and updatedAt fields
 });
 
-// Sync the model with the database
-InqlabiPoetry.sync()
-    .then(() => console.log('InqlabiPoetry model synced with the database'))
-    .catch((error) => console.error('Error syncing InqlabiPoetry model:', error));
+// Create and export the InqlabiPoetry model
+const InqlabiPoetry = mongoose.model('InqlabiPoetry', inqlabiPoetrySchema);
 
-module.exports = InqlabiPoetry; // Export the InqlabiPoetry model
+module.exports = InqlabiPoetry;
