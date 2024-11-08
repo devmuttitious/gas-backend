@@ -30,17 +30,22 @@ const createGhazal = async (req, res) => {
 // Delete a Ghazal
 const deleteGhazal = async (req, res) => {
     const { id } = req.params; // Get Ghazal ID from the request parameters
+
     try {
-        const ghazal = await Ghazal.findById(id); // Find the Ghazal by its MongoDB ID
+        // Use findByIdAndDelete for better clarity and updated Mongoose methods
+        const ghazal = await Ghazal.findByIdAndDelete(id);
+
         if (!ghazal) {
             return res.status(404).json({ message: 'Ghazal not found' });
         }
-        await ghazal.remove(); // Delete the Ghazal from MongoDB
-        res.json({ message: 'Ghazal deleted successfully' });
+
+        // Respond with no content (204) on successful deletion
+        res.status(204).send(); // No content to return
     } catch (error) {
         console.error('Error deleting Ghazal:', error);
         res.status(500).json({ message: 'Error deleting Ghazal' });
     }
 };
+
 
 module.exports = { getGhazals, createGhazal, deleteGhazal };
