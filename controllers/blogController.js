@@ -8,20 +8,24 @@ const upload = multer({ storage: storage }).single('image'); // Expects 'image' 
 // Function to fetch all blogs
 const getBlogs = async (req, res) => {
     try {
-        const blogs = await Blog.findAll(); // Fetch all blog posts
+        const blogs = await Blog.find(); // Fetch all blog posts in MongoDB
+
         const blogsWithBase64Images = blogs.map(blog => ({
-            id: blog.id,
+            id: blog._id, // MongoDB uses _id as the primary key
             title: blog.title,
             date: blog.date,
             author: blog.author,
             content: blog.content,
-            image: blog.image ? blog.image.toString('base64') : null // Convert BLOB to Base64 string
+            image: blog.image ? blog.image.toString('base64') : null // Convert image buffer to Base64 string
         }));
+
         res.json(blogsWithBase64Images);
     } catch (error) {
+        console.error("Error fetching blogs:", error);
         res.status(500).json({ message: error.message });
     }
 };
+
 
 
 // Function to create a new blog post
