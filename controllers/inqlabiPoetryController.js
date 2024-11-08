@@ -38,10 +38,12 @@ const deleteInqlabiPoetry = async (req, res) => {
             return res.status(404).json({ message: "Poetry not found." }); // If no poetry entry is found
         }
 
-        res.status(204).send(); // No Content response to indicate successful deletion
+        res.status(204).send(); // Send a 204 No Content response to indicate successful deletion
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Error deleting Inqlabi poetry:", error);
+        res.status(500).json({ message: "Error deleting poetry: " + error.message }); // Send 500 error if there's an exception
     }
 };
+
 
 module.exports = { getInqlabiPoetry, createInqlabiPoetry, deleteInqlabiPoetry };
