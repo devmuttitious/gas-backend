@@ -55,21 +55,23 @@ const uploadImage = (req, res) => {
     });
 };
 
-// Function to delete a gallery item by ID
 const deleteGalleryItem = async (req, res) => {
-    const { id } = req.params; // Get gallery item ID from request parameters
+    const { id } = req.params; // Get ID from URL
 
     try {
-        const galleryItem = await Gallery.findById(id); // Find the gallery item by MongoDB ID
-        if (!galleryItem) {
-            return res.status(404).json({ message: "Gallery item not found." });
+        // Make sure you're calling the correct method to delete the image
+        const deletedImage = await Gallery.findByIdAndDelete(id); // Or whatever your delete method is
+        
+        if (!deletedImage) {
+            return res.status(404).json({ message: "Image not found" });
         }
 
-        await galleryItem.remove(); // Remove the gallery item from MongoDB
-        res.status(200).json({ message: "Gallery item deleted successfully." });
+        res.status(200).json({ message: "Image deleted successfully" });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Error deleting image:", error);
+        res.status(500).json({ message: "Error deleting image" });
     }
 };
+
 
 module.exports = { getGalleryItems, createGalleryItem, uploadImage, deleteGalleryItem };
